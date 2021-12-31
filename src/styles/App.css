@@ -1,0 +1,21 @@
+.board {
+ margin: auto;
+ margin-top: calc(50vh - 180px);
+ height: 400px;
+ width: 500px;
+ background-color: green;
+ display: flex;
+ flex-wrap: wrap;
+
+}
+
+.square {
+ height: 47px;
+ width: 50px;
+ background-color: lightgreen;
+ display: inline;
+ padding-top: 3px;
+ align-items: center;
+text-align: center;
+ font-size: 30px;
+}
