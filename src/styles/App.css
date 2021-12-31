@@ -8,10 +8,12 @@
 }
 
 .square {
- height: 47px;
+ height: 50px;
  width: 50px;
+ /* max-height: 50px !important;
+ max-width: 50px !important; */
  display: inline;
- padding-top: 3px;
+ /* padding-top: 3px; */
  align-items: center;
  text-align: center;
  font-size: 30px;
@@ -30,4 +32,47 @@
 
 .revealedOdd {
  background-color: rgb(215, 184, 153);
+}
+.value1 {
+ color: blue;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value2 {
+ color: green;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value3 {
+ color: red;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value4 {
+ color: purple;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value5 {
+ color: orange;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value6 {
+ color: darkred;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value7 {
+ color: black;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value8 {
+ color: grey;
+ font-size: 35px;
+ font-weight: bold;
+}
+.value💣 {
+ background-color: red;
 }
