@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useRef } from 'react/cjs/react.development';
 import generateBoard from '../helpers/generageBoard';
+import reveal from '../helpers/reveal';
 // import initialBoard from '../helpers/initialBoard';
 // import initialBoard from '../helpers/initialBoard';
 
 function Board(props) {
  const initialBoard = Array(8).fill(Array(10).fill({}));
- console.log(initialBoard);
  const [board, setBoard] = useState(initialBoard);
  const [gameIsWon, setGameIsWon] = useState(false);
  const [gameIsLost, setGameisLost] = useState(false);
@@ -63,7 +63,6 @@ function Board(props) {
    time: {seconds.current}
    <div className="board">
     {board.map((rowOfSquares, rowNum) => {
-     console.log(rowOfSquares);
      return rowOfSquares.map((square, colNum) => {
       const { isFlagged, isRevealed, value, row, col } = square;
       return (
@@ -91,8 +90,8 @@ function Board(props) {
          }
 
          setBoard((prevstate) => {
-          const newState = [...prevstate];
-          newState[rowNum][colNum].isRevealed = true;
+          const newState = reveal(prevstate, rowNum, colNum);
+          console.log('new state: '+newState)
           return newState;
          });
         }}
