@@ -12,6 +12,7 @@ function Board(props) {
  const [firstClick, setFirstClick] = useState(true);
  const [flags, setFlags] = useState(10);
  const [seconds, setSeconds] = useState(0);
+
  const runTimer = () => {
   setTimeout(() => {
    setSeconds((prevstate) => prevstate + 1);
@@ -21,53 +22,72 @@ function Board(props) {
   }, 1000);
  };
 
+ const patchedRemainder = (place) => {
+  let addFactor = Math.floor(place / 10);
+  return (addFactor + place) % 2;
+ };
+
+ const minedOrFlaged = (mined, flagged) => {
+  if (gameIsWon || gameIsLost) {
+//    if (mined && flagged) {
+    return '🚩';
+   }
+   if (mined) {
+    return '💣';
+   }
+   if (flagged) {
+    return '❌';
+   }
+//   }
+//   if (flagged) {
+//    return '🚩';
+//   }
+  return null;
+ };
+
  return (
   <div>
    Flags: {flags}
    time: {seconds}
    <div className="board">
-    {board.map((square, i) => {
-     const opposite = findColor(i);
-     return (
-      <div
-       style={{ backgroundColor: opposite ? 'green' : 'lightgreen' }}
-       className="square"
-       key={square.placement || i}
-       onClick={() => {
-        if (firstClick) {
-         setFirstClick(false);
-         setBoard(generateBoard(i));
-         runTimer();
-        }
-       }}
-      >
-       {square.adjacentMines ? square.adjacentMines : null}
-       {minedOrFlaged(square)}
-       {/* {square.mined  ? '💣': null}
-       {square.flagged? '🚩': null} */}
-      </div>
-     );
-    })}
+    {board.map(
+     ({ isMined, isFlagged, isRevealed, placement, adjacentMines }, i) => {
+      return (
+       <div
+        className={`square ${
+         patchedRemainder(i) ? 'patchedEven' : 'patchedOdd'
+        }`}
+        key={placement || i}
+        onClick={() => {
+         if (isFlagged) {
+          return;
+         }
+         if (firstClick) {
+          setFirstClick(false);
+          setBoard(generateBoard(i));
+          runTimer();
+         }
+
+         setBoard((prevstate) => {
+          const newState = prevstate.map((square) => {
+           if (square.placement === placement) {
+            square.isRevealed = true;
+           }
+           return square;
+          });
+          return newState;
+         });
+        }}
+       >
+        {adjacentMines ? adjacentMines : null}
+        {minedOrFlaged(isMined, isFlagged)}
+       </div>
+      );
+     }
+    )}
    </div>
   </div>
  );
 }
 
 export default Board;
-
-function findColor(place) {
- let addFactor = Math.floor(place / 10);
- return (addFactor + place) % 2;
-}
-
-function minedOrFlaged({ mined, flagged }) {
- if (mined && flagged) {
-  return '🚩';
- }
- if (mined) {
-  return '💣';
- }
- if (flagged) {
-  return '❌';
- }
-}
