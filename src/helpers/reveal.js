@@ -1,7 +1,7 @@
 const reveal = (arr, row, col, nonMinesRevealedCount = 100) => {
  console.log('just got here' + arr[row][col].isRevealed);
  if (arr[row][col].isRevealed) {
-  return arr;
+  return [...arr];
  }
  let flipped = [];
  flipped.push(arr[row][col]);
@@ -155,7 +155,7 @@ const reveal = (arr, row, col, nonMinesRevealedCount = 100) => {
 
  // return { arr, nonMinesRevealedCount, };
  console.log('arr' + arr[1][1]);
- return arr;
+ return [...arr];
 };
 
 export default reveal;

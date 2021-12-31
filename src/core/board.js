@@ -14,6 +14,9 @@ function Board(props) {
  const [flags, setFlags] = useState(10);
  const seconds = useRef(0);
 
+
+ 
+
  const runTimer = () => {
   setTimeout(() => {
    seconds.current++;
@@ -50,7 +53,7 @@ function Board(props) {
    return '🚩';
   }
 
-  if (value) {
+  if (isRevealed && value) {
    return value;
   }
 
@@ -91,12 +94,29 @@ function Board(props) {
 
          setBoard((prevstate) => {
           const newState = reveal(prevstate, rowNum, colNum);
-          console.log('new state: '+newState)
+          console.log('new state: ' + newState);
+          return newState;
+         });
+        }}
+        onContextMenu={(e) => {
+         e.preventDefault();
+         if (firstClick || isRevealed) {
+          return;
+         }
+         setFlags((prevstate) => {
+          if (!isFlagged) {
+           return prevstate - 1;
+          }
+          return prevstate + 1;
+         });
+         setBoard((prevstate) => {
+          const newState = [...prevstate];
+          newState[rowNum][colNum].isFlagged = !isFlagged;
+
           return newState;
          });
         }}
        >
-        {' '}
         {display(isFlagged, isRevealed, value)}
        </div>
       );
