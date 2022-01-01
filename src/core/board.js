@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import generateBoard from '../helpers/generageBoard';
+import generateBoard from '../helpers/generateBoard';
 import reveal from '../helpers/reveal';
 
 function Board(props) {
@@ -170,14 +170,3 @@ function Board(props) {
 
 export default Board;
 
-// setBoard((prevstate) => {
-//     const newState = prevstate.map((row) => {
-//      return row.map((square) => {
-//       if (square.row === rowNum && square.col === colNum) {
-//        square.isRevealed = true;
-//       }
-//       return square;
-//      });
-//     });
-//     return newState;
-//    });

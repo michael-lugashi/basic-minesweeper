@@ -1,60 +1,3 @@
-// function generateBoard(startingSquare) {
-//  const notMined = [];
-//  for (let i = 0; i < 0; i++) {
-//   notMined.push(new Square(false));
-//  }
-//  const mined = [];
-//  for (let i = 0; i < 71; i++) {
-//   mined.push(new Square(true));
-//  }
-//  const board = notMined.concat(mined);
-//  board.sort(() => Math.random() - 0.5);
-//  const freeSpaceIndexes = [-11, -10, -9, -1, 0, 1, 9, 10, 11];
-
-//  for (const indexDif of freeSpaceIndexes) {
-//   if (startingSquare % 10 === 0 && [-11, -1, 9].includes(indexDif)) {
-//    continue;
-//   }
-//   board.splice(startingSquare + indexDif, 0, new Square(false));
-//  }
-
-//  for (let i = 0; i < board.length; i++) {
-//   board[i].placement = i;
-
-//   if (board[i].isMined) {
-//    continue;
-//   }
-
-//   const surroundingIndexs = [-11, -1, 9, -10, 10, -9, 1, 11];
-//   let _adjacentMines = 0;
-//   for (let j = 0; j < 3; j++) {
-//    const diff = surroundingIndexs[j];
-//    if (board[i + diff] && board[i + diff].isMined && i % 10 !== 0) {
-//     _adjacentMines++;
-//    }
-//   }
-//   console.log(i);
-//   console.log(_adjacentMines);
-//   for (let j = 3; j < 5; j++) {
-//    const diff = surroundingIndexs[j];
-//    if (board[i + diff] && board[i + diff].isMined) {
-//     _adjacentMines++;
-//    }
-//   }
-//   console.log(i);
-//   console.log(_adjacentMines);
-//   for (let j = 5; j < 9; j++) {
-//    const diff = surroundingIndexs[j];
-//    if (board[i + diff] && board[i + diff].isMined && (i + 1) % 10 !== 0) {
-//     _adjacentMines++;
-//    }
-//   }
-//   board[i].adjacentMines = _adjacentMines;
-//  }
-
-//  return board;
-// }
-
 function generateBoard(totalRows, totalCols, mines, startRow, StartCol) {
  //generate empty grid
  const grid = [];
@@ -71,6 +14,8 @@ function generateBoard(totalRows, totalCols, mines, startRow, StartCol) {
  while (mineCount < mines) {
   const row = Math.floor(Math.random() * totalRows);
   const col = Math.floor(Math.random() * totalCols);
+
+  // MAKES SURE THE STARTING SQUARE HAS ZERO SAROUNDING MINES AND IS NOT MINED ITSELF
 
   // TOP
 
