@@ -3,6 +3,7 @@ import generateBoard from '../helpers/generateBoard';
 import reveal from '../helpers/reveal';
 
 function Board(props) {
+ const [squareClickSound] = useState(new Audio('../sounds/squareClick.wav'));
  const initialBoard = Array(8).fill(Array(10).fill({}));
  const [board, setBoard] = useState(initialBoard);
  const [gameIsWon, setGameIsWon] = useState(false);
@@ -100,7 +101,7 @@ function Board(props) {
      setGameisLost(false);
      setSeconds(0);
      setFirstClick(true);
-     setFlags(10)
+     setFlags(10);
      setBoard(initialBoard);
     }}
    >
@@ -127,7 +128,9 @@ function Board(props) {
          if (isFlagged || gameIsLost || gameIsWon) {
           return;
          }
-
+         squareClickSound.type = 'mp3'
+         squareClickSound.play();
+          console.log(squareClickSound)
          if (firstClick) {
           setFirstClick(false);
           setBoard(generateBoard(8, 10, 10, rowNum, colNum));
@@ -169,4 +172,3 @@ function Board(props) {
 }
 
 export default Board;
-
