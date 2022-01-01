@@ -41,7 +41,7 @@ function Board(props) {
  }, [isTimerOn]);
 
  useEffect(() => {
-  if (seconds === 10) {
+  if (seconds === 999) {
    setIsTimerOn(false);
   }
  }, [seconds]);
@@ -49,15 +49,14 @@ function Board(props) {
  useEffect(() => {
   if (gameIsWon) {
    setIsTimerOn(false);
-   alert('Congrats you won!');
+   alert(`Congrats you won in ${seconds} seconds!`);
   }
  }, [gameIsWon]);
 
  useEffect(() => {
   if (gameIsLost) {
    setIsTimerOn(false);
-   console.log('Sorry you lost!');
-   //    alert('Sorry you lost!');
+   alert('Sorry you lost!');
   }
  }, [gameIsLost]);
 
@@ -94,6 +93,19 @@ function Board(props) {
   <div>
    Flags: {flags}
    time: {seconds}
+   <button
+    onClick={() => {
+     setIsTimerOn(false);
+     setGameIsWon(false);
+     setGameisLost(false);
+     setSeconds(0);
+     setFirstClick(true);
+     setFlags(10)
+     setBoard(initialBoard);
+    }}
+   >
+    Redo🔄
+   </button>
    <div className="board">
     {board.map((rowOfSquares, rowNum) => {
      return rowOfSquares.map((square, colNum) => {
