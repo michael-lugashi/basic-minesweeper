@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { useRef } from 'react/cjs/react.development';
+import React, { useEffect, useState } from 'react';
 import generateBoard from '../helpers/generageBoard';
 import reveal from '../helpers/reveal';
-// import initialBoard from '../helpers/initialBoard';
-// import initialBoard from '../helpers/initialBoard';
 
 function Board(props) {
  const initialBoard = Array(8).fill(Array(10).fill({}));
@@ -12,24 +9,57 @@ function Board(props) {
  const [gameIsLost, setGameisLost] = useState(false);
  const [firstClick, setFirstClick] = useState(true);
  const [flags, setFlags] = useState(10);
- const seconds = useRef(0);
-
-
- 
-
- const runTimer = () => {
-  setTimeout(() => {
-   seconds.current++;
-   if (!gameIsLost && !gameIsWon && seconds < 999) {
-    runTimer();
+ const [seconds, setSeconds] = useState(0);
+ const [isTimerOn, setIsTimerOn] = useState(false);
+ useEffect(() => {
+  const flattendBoard = board.flat();
+  let numOfRevealed = 0;
+  for (const square of flattendBoard) {
+   if (square.isRevealed && square.value === '💣') {
+    setGameisLost(true);
+    return;
    }
-  }, 1000);
- };
+   if (square.isRevealed) {
+    numOfRevealed++;
+   }
+   if (numOfRevealed === 70) {
+    setGameIsWon(true);
+   }
+  }
+ }, [board]);
 
- //  const patchedRemainder = (place) => {
- //   let addFactor = Math.floor(place / 10);
- //   return (addFactor + place) % 2;
- //  };
+ useEffect(() => {
+  let secondIntervalId = null;
+  if (isTimerOn) {
+   secondIntervalId = setInterval(() => {
+    setSeconds((lastSecond) => lastSecond + 1);
+   }, 1000);
+  } else {
+   clearInterval(secondIntervalId);
+  }
+  return () => clearInterval(secondIntervalId);
+ }, [isTimerOn]);
+
+ useEffect(() => {
+  if (seconds === 10) {
+   setIsTimerOn(false);
+  }
+ }, [seconds]);
+
+ useEffect(() => {
+  if (gameIsWon) {
+   setIsTimerOn(false);
+   alert('Congrats you won!');
+  }
+ }, [gameIsWon]);
+
+ useEffect(() => {
+  if (gameIsLost) {
+   setIsTimerOn(false);
+   console.log('Sorry you lost!');
+   //    alert('Sorry you lost!');
+  }
+ }, [gameIsLost]);
 
  const gridColorDecider = (rowNum, colNum) => {
   const sum = rowNum + colNum;
@@ -37,7 +67,7 @@ function Board(props) {
  };
 
  const display = (isFlagged, isRevealed, value) => {
-  if (gameIsWon || gameIsLost) {
+  if (gameIsLost) {
    if (value === '💣' && isFlagged) {
     return '🚩';
    }
@@ -63,7 +93,7 @@ function Board(props) {
  return (
   <div>
    Flags: {flags}
-   time: {seconds.current}
+   time: {seconds}
    <div className="board">
     {board.map((rowOfSquares, rowNum) => {
      return rowOfSquares.map((square, colNum) => {
@@ -82,25 +112,24 @@ function Board(props) {
       } ${isRevealed && value ? 'value' + value : ''}`}
         key={`${rowNum}_${colNum}`}
         onClick={() => {
-         if (isFlagged) {
+         if (isFlagged || gameIsLost || gameIsWon) {
           return;
          }
 
          if (firstClick) {
           setFirstClick(false);
           setBoard(generateBoard(8, 10, 10, rowNum, colNum));
-          runTimer();
+          setIsTimerOn(true);
          }
 
          setBoard((prevstate) => {
           const newState = reveal(prevstate, rowNum, colNum);
-          console.log('new state: ' + newState);
           return newState;
          });
         }}
         onContextMenu={(e) => {
          e.preventDefault();
-         if (firstClick || isRevealed) {
+         if (firstClick || isRevealed || gameIsLost || gameIsWon) {
           return;
          }
          setFlags((prevstate) => {
@@ -123,52 +152,6 @@ function Board(props) {
      });
     })}
    </div>
-   {/* <div className="board">
-    {board.map(
-     ({ isMined, isFlagged, isRevealed, placement, adjacentMines }, i) => {
-      return (
-       <div
-        className={`square ${patchedRemainder(i) ? 'patchedEven' : 'patchedOdd'}
-        ${
-         isRevealed
-          ? patchedRemainder(i)
-            ? 'revealedEven'
-            : 'revealedOdd'
-          : ''
-        } ${
-         isRevealed && adjacentMines ? 'adjacentMines' + adjacentMines : ''
-        }`}
-        key={placement || i}
-        onClick={() => {
-         if (isFlagged) {
-          return;
-         }
-
-         if (firstClick) {
-          //   setFirstClick(false);
-          console.log(i);
-          setBoard(generateBoard(i));
-          runTimer();
-         }
-
-         setBoard((prevstate) => {
-          const newState = prevstate.map((square) => {
-           if (square.placement === placement) {
-            square.isRevealed = true;
-           }
-           return square;
-          });
-          return newState;
-         });
-        }}
-       >
-        {adjacentMines ? adjacentMines : null}
-        {minedOrFlaged(isMined, isFlagged, isRevealed, adjacentMines)}
-       </div>
-      );
-     }
-    )}
-   </div> */}
   </div>
  );
 }

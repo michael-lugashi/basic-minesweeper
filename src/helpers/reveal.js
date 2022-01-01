@@ -1,5 +1,4 @@
 const reveal = (arr, row, col, nonMinesRevealedCount = 100) => {
- console.log('just got here' + arr[row][col].isRevealed);
  if (arr[row][col].isRevealed) {
   return [...arr];
  }
@@ -12,7 +11,6 @@ const reveal = (arr, row, col, nonMinesRevealedCount = 100) => {
    nonMinesRevealedCount--;
    single.isRevealed = true;
   }
-  console.log('arr1:' + single.value);
 
   if (single.value !== 0) {
    break;
@@ -154,7 +152,6 @@ const reveal = (arr, row, col, nonMinesRevealedCount = 100) => {
  }
 
  // return { arr, nonMinesRevealedCount, };
- console.log('arr' + arr[1][1]);
  return [...arr];
 };
 
